@@ -1,0 +1,13 @@
+<!DOCTYPE html>
+<html>
+  <body style="margin:0;display:flex;justify-content:center;align-items:center;height:100vh;font-family:Helvetica,sans-serif;font-size:3em;background:white;color:black;">
+    <div id="name">Gabriele de Seta</div>
+    <script>
+      const names = ["Gabriele de Seta","Gabrielle de Seta","Gabriela de Seta","Gabriel de Seta", "Gabriel Seta"];
+      let i = 0;
+      setInterval(() => {
+        document.getElementById("name").textContent = names[i++ % names.length];
+      }, 1000);
+    </script>
+  </body>
+</html>
