@@ -1,12 +1,46 @@
 <!DOCTYPE html>
 <html>
-  <body style="margin:0;display:flex;justify-content:center;align-items:center;height:100vh;font-family:Helvetica,sans-serif;font-size:3em;background:white;color:black;">
-    <div id="name">Gabriele de Seta</div>
+<body style="margin:0;display:flex;justify-content:center;align-items:center;height:100vh;font-family:'Times New Roman',serif;font-size:3em;background:white;color:black;">
+
+    <div id="output">Gabriele de Seta</div>
     <script>
-      const names = ["Gabriele de Seta","Gabrielle de Seta","Gabriela de Seta","Gabriel de Seta", "Gabriel Seta"];
-      let i = 0;
+      const firstNames = [
+        { name: "Gabriele", count: 5 },
+        { name: "Gabriel", count: 3 },
+        { name: "Gabrielle", count: 2 },
+        { name: "Gabriella", count: 1 },
+        { name: "Gabriela", count: 1 },
+        { name: "Gabreile", count: 1 },      
+        { name: "Gabriela", count: 1 },
+        { name: "Garbiele", count: 1 }
+      ];
+
+      const surnames = [
+        { name: "de Seta", count: 4 },
+        { name: "De Seta", count: 5 },
+        { name: "Seta, de", count: 1 },
+        { name: "Seta", count: 3 },
+        { name: "de Seata", count: 2 },
+        { name: "Seeta", count: 1 },
+        { name: "de Setta", count: 1 },
+        { name: "de Setta", count: 1 }
+      ];
+
+      function pickWeighted(arr) {
+        let total = arr.reduce((sum, obj) => sum + obj.count, 0);
+        let r = Math.random() * total;
+        for (let obj of arr) {
+          r -= obj.count;
+          if (r < 0) return obj.name;
+        }
+      }
+
+      const out = document.getElementById("output");
+
       setInterval(() => {
-        document.getElementById("name").textContent = names[i++ % names.length];
+        const first = pickWeighted(firstNames);
+        const last = pickWeighted(surnames);
+        out.textContent = first + " " + last;
       }, 1000);
     </script>
   </body>
