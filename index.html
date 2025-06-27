@@ -49,13 +49,20 @@
         }
       }
 
+      
       const out = document.getElementById("output");
 
-      setInterval(() => {
-        const first = pickWeighted(firstNames);
-        const last = pickWeighted(surnames);
-        out.textContent = first + " " + last;
-      }, 1000);
+      let delay = 2000;       // Start slow (ms)
+      const minDelay = 200;   // Fastest speed
+      const decay = 0.9;      // Acceleration factor per cycle
+
+      function cycle() {
+        out.textContent = pickWeighted(firstNames) + " " + pickWeighted(surnames);
+        delay = Math.max(minDelay, delay * decay); // Accelerate
+        setTimeout(cycle, delay);
+      }
+
+      cycle(); // start
     </script>
   </body>
 </html>
