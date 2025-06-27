@@ -53,13 +53,30 @@
       
       const out = document.getElementById("output");
 
-      let delay = 2000;       // Start slow (ms)
-      const minDelay = 10;   // Fastest speed
-      const decay = 0.9;      // Acceleration factor per cycle
+      let delay = 2000;        // Initial delay (ms)
+      const minDelay = 10;    // Fastest
+      const maxDelay = 2000;   // Slowest
+      const step = 0.9;        // Speed factor per tick
+      let direction = -1;      // -1: accelerating, +1: decelerating
 
       function cycle() {
         out.textContent = pickWeighted(firstNames) + " " + pickWeighted(surnames);
-        delay = Math.max(minDelay, delay * decay); // Accelerate
+
+        // Adjust delay based on direction
+        if (direction === -1) {
+          delay *= step;
+          if (delay <= minDelay) {
+            delay = minDelay;
+            direction = 1; // switch to decelerate
+          }
+        } else {
+          delay /= step;
+          if (delay >= maxDelay) {
+            delay = maxDelay;
+            direction = -1; // switch to accelerate
+          }
+        }
+
         setTimeout(cycle, delay);
       }
 
