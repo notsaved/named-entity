@@ -53,39 +53,18 @@
         }
       }
 
-            const out = document.getElementById("output");
-
-    const minDelay = 100;  // Fastest speed
-    const maxDelay = 2000; // Slowest speed
-    const cycleLength = 8000; // 8s full speed cycle
-
-    function timingCurve(phase) {
-      // Phase: 0 to 1 (fraction of cycle)
-      // Define custom shape:
-      if (phase < 0.25) {
-        // Slow → fast (ease-in)
-        return 1 - Math.pow(phase / 0.25, 2);
-      } else if (phase < 0.6) {
-        // Stay fast
-        return 0;
-      } else if (phase < 1) {
-        // Fast → slow (ease-out)
-        const p = (phase - 0.6) / 0.4;
-        return Math.pow(p, 2);
+                  const out = document.getElementById("output");
+      let delay = 3000;       // Start slow (ms)
+      const minDelay = 0.1;   // Fastest speed
+      const decay = 0.9;      // Acceleration factor per cycle
+        
+      function cycle() {
+        out.textContent = pickWeighted(firstNames) + " " + pickWeighted(surnames);
+        delay = Math.max(minDelay, delay * decay); // Accelerate
+        setTimeout(cycle, delay);
       }
-    }
-
-    function loop() {
-      const now = performance.now();
-      const phase = (now % cycleLength) / cycleLength; // 0–1
-      const curve = timingCurve(phase); // 0–1
-      const delay = minDelay + (maxDelay - minDelay) * curve;
-
-      out.textContent = pickWeighted(firstNames) + " " + pickWeighted(surnames);
-      setTimeout(loop, delay);
-    }
-
-    loop(); // Start
+        
+      cycle(); // start
     </script>
   </body>
 </html>
