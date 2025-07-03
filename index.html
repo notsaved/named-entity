@@ -56,17 +56,17 @@
             const out = document.getElementById("output");
 
       let angle = 0;
-      const minDelay = 0.1;
+      const minDelay = 1;
       const maxDelay = 2000;
       const amplitude = maxDelay - minDelay;
-      const speed = 0.1; // radians per frame; smaller = slower wave
+      const speed = 0.1; // radians per step
 
       function cycle() {
         out.textContent = pickWeighted(firstNames) + " " + pickWeighted(surnames);
 
-        // delay follows sine wave
+        // Calculate delay from sine wave
         const delay = minDelay + (amplitude * (1 + Math.sin(angle)) / 2);
-        angle += speed;
+        angle = (angle + speed) % (2 * Math.PI); // keep angle bounded
 
         setTimeout(cycle, delay);
       }
