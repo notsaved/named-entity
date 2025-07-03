@@ -55,23 +55,37 @@
 
             const out = document.getElementById("output");
 
-      let angle = 0;
-      const minDelay = 1;
-      const maxDelay = 2000;
-      const amplitude = maxDelay - minDelay;
-      const speed = 0.1; // radians per step
+    const minDelay = 100;  // Fastest speed
+    const maxDelay = 2000; // Slowest speed
+    const cycleLength = 8000; // 8s full speed cycle
 
-      function cycle() {
-        out.textContent = pickWeighted(firstNames) + " " + pickWeighted(surnames);
-
-        // Calculate delay from sine wave
-        const delay = minDelay + (amplitude * (1 + Math.sin(angle)) / 2);
-        angle = (angle + speed) % (2 * Math.PI); // keep angle bounded
-
-        setTimeout(cycle, delay);
+    function timingCurve(phase) {
+      // Phase: 0 to 1 (fraction of cycle)
+      // Define custom shape:
+      if (phase < 0.25) {
+        // Slow → fast (ease-in)
+        return 1 - Math.pow(phase / 0.25, 2);
+      } else if (phase < 0.6) {
+        // Stay fast
+        return 0;
+      } else if (phase < 1) {
+        // Fast → slow (ease-out)
+        const p = (phase - 0.6) / 0.4;
+        return Math.pow(p, 2);
       }
+    }
 
-      cycle(); // start
+    function loop() {
+      const now = performance.now();
+      const phase = (now % cycleLength) / cycleLength; // 0–1
+      const curve = timingCurve(phase); // 0–1
+      const delay = minDelay + (maxDelay - minDelay) * curve;
+
+      out.textContent = pickWeighted(firstNames) + " " + pickWeighted(surnames);
+      setTimeout(loop, delay);
+    }
+
+    loop(); // Start
     </script>
   </body>
 </html>
