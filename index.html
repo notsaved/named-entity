@@ -19,14 +19,15 @@
       const firstNames = [
         { name: "Gabriele", count: 5 },
         { name: "Gabriel", count: 3 },
-        { name: "Gabrielle", count:  3},
+        { name: "Gabrielle", count:  4},
         { name: "Gabriella", count: 2 },
         { name: "Gabriela", count: 2 },
         { name: "Gabreile", count: 1 },      
         { name: "Gabriela", count: 2 },
         { name: "Garbiele", count: 1 },
         { name: "Garbriele", count: 1 },
-        { name: "Garbiele", count: 1 },
+        { name: "Grabriele", count: 1 },
+        { name: "Gabrile", count: 1 },
         { name: "Gabirele", count: 1 }
       ];
 
@@ -40,6 +41,7 @@
         { name: "de Setta", count: 1 },
         { name: "di Seta", count: 1 },
         { name: "De Sata", count: 1 }
+        { name: "da Seta", count: 1 }
       ];
 
       function pickWeighted(arr) {
@@ -51,32 +53,20 @@
         }
       }
 
-      
-      const out = document.getElementById("output");
+            const out = document.getElementById("output");
 
-      let delay = 2000;        // Initial delay (ms)
-      const minDelay = 0.1;    // Fastest
-      const maxDelay = 2000;   // Slowest
-      const step = 0.9;        // Speed factor per tick
-      let direction = -1;      // -1: accelerating, +1: decelerating
+      let angle = 0;
+      const minDelay = 0.1;
+      const maxDelay = 2000;
+      const amplitude = maxDelay - minDelay;
+      const speed = 0.1; // radians per frame; smaller = slower wave
 
       function cycle() {
         out.textContent = pickWeighted(firstNames) + " " + pickWeighted(surnames);
 
-        // Adjust delay based on direction
-        if (direction === -1) {
-          delay *= step;
-          if (delay <= minDelay) {
-            delay = minDelay;
-            direction = 1; // switch to decelerate
-          }
-        } else {
-          delay /= step;
-          if (delay >= maxDelay) {
-            delay = maxDelay;
-            direction = -1; // switch to accelerate
-          }
-        }
+        // delay follows sine wave
+        const delay = minDelay + (amplitude * (1 + Math.sin(angle)) / 2);
+        angle += speed;
 
         setTimeout(cycle, delay);
       }
